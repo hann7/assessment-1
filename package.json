@@ -13,6 +13,9 @@
   "author": "Hannah Santoyo, for unnamed company",
   "license": "ISC",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
+    "dotenv": "^16.0.1",
     "eslint": "^8.22.0",
     "nodemon": "^2.0.19",
     "prettier": "^2.7.1",
