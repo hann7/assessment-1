@@ -1,1 +1,3 @@
-# assessment-1
+# Assumptions:
+
+## How to start server:
