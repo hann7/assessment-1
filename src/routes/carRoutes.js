@@ -6,7 +6,7 @@ router.get('/:vin', carController.getCar, (req, res) => {
   return res.status(200).json(res.locals.car);
 });
 
-router.post('/', carController.addCar, (req, res) => {
+router.post('/', carController.decodeVin, carController.addCar, (req, res) => {
   return res.status(200).json("car added", res.locals.newCar);
 });
 
