@@ -1,12 +1,13 @@
-import express from 'express';
-const carController = require('./controllers/carController');
+const express = require('express');
+const carRouter = require('./routes/carRoutes.js');
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
 
-app.use('/cars', carController);
+//car router
+app.use('/cars', carRouter);
 
 // global error handler
 app.use((err, req, res, next) => {
