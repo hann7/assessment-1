@@ -1,6 +1,7 @@
-const carController = {};
 const db = require('../db/carModel');
 const fetch = require('node-fetch');
+
+const carController = {};
 
 /**
  * **********************************************
@@ -14,16 +15,16 @@ carController.decodeVin = async (req, res, next) => {
   const url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVINValuesBatch/${vin}?format=json`;
 
   await fetch(url, { method: 'POST' })
-      .then(data => data.json()) 
-      .then(data => {
-        model = data.Results[0].Model;
-        year = Number(data.Results[0].ModelYear);
-        make = data.Results[0].Make
-      }).catch(error => {
-        return next({
-          log: 'Error decoding VIN',
-          message: { error }
-      })
+    .then(data => data.json()) 
+    .then(data => {
+      model = data.Results[0].Model;
+      year = Number(data.Results[0].ModelYear);
+      make = data.Results[0].Make;
+    }).catch(error => {
+      return next({
+        log: 'Error decoding VIN',
+        message: { error }
+      });
     });
 
   res.locals.decoded = {
@@ -51,15 +52,15 @@ carController.getCar = (req, res, next) => {
   const queryParams = [vin];
   
   db.query(query, queryParams)
-  .then(data => {
-    res.locals.car = data.rows[0];
-    return next();
-  }).catch(error => {
-    return next({
-      log: 'Error getting car',
-      message: { error }
-    })
-  });
+    .then(data => {
+      res.locals.car = data.rows[0];
+      return next();
+    }).catch(error => {
+      return next({
+        log: 'Error getting car',
+        message: { error }
+      });
+    });
 
 };
 
@@ -83,15 +84,15 @@ carController.addCar = (req, res, next) => {
   const queryParams = [vin, year, make, model, license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color];
   
   db.query(query, queryParams)
-  .then(data => {
-    res.locals.newCar = data.rows[0];
-    return next();
-  }).catch(error => {
-    return next({
-      log: 'Error adding car',
-      message: { error }
-    })
-  });
+    .then(data => {
+      res.locals.newCar = data.rows[0];
+      return next();
+    }).catch(error => {
+      return next({
+        log: 'Error adding car',
+        message: { error }
+      });
+    });
 
 };
 
@@ -110,19 +111,19 @@ carController.updateCar = (req, res, next) => {
   const query = 
   `UPDATE Cars 
   SET license_plate = $2, registration_number = $3, registration_state = $4, registration_expiration = $5, registration_name = $6, value = $7, mileage = $8, description = $9, color = $10, last_updated = current_timestamp
-  WHERE vin = $1 RETURNING *`
+  WHERE vin = $1 RETURNING *`;
   const queryParams = [vin, license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color];
 
   db.query(query, queryParams)
-  .then(data => {
-    res.locals.updatedCar = data.rows[0];
-    return next();
-  }).catch(error => {
-    return next({
-      log: 'Error updating car',
-      message: { error }
-    })
-  });
+    .then(data => {
+      res.locals.updatedCar = data.rows[0];
+      return next();
+    }).catch(error => {
+      return next({
+        log: 'Error updating car',
+        message: { error }
+      });
+    });
 
 };
 
@@ -136,19 +137,19 @@ carController.updateCar = (req, res, next) => {
 
 carController.deleteCar = (req, res, next) => {
   const { vin } = req.params;
-  const query = `DELETE FROM Cars WHERE vin = $1 RETURNING *`
-  const queryParams = [ vin ]
+  const query = `DELETE FROM Cars WHERE vin = $1 RETURNING *`;
+  const queryParams = [ vin ];
   
   db.query(query, queryParams)
-  .then(data => {
-    res.locals.deletedCar = data.rows[0];
-    return next();
-  }).catch(error => {
-    return next({
-      log: 'Error deleting car',
-      message: { error }
-    })
-  });
+    .then(data => {
+      res.locals.deletedCar = data.rows[0];
+      return next();
+    }).catch(error => {
+      return next({
+        log: 'Error deleting car',
+        message: { error }
+      });
+    });
 
 };
 
