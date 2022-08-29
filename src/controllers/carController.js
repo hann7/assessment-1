@@ -56,7 +56,7 @@ carController.getCar = (req, res, next) => {
     return next();
   }).catch(error => {
     return next({
-      log: 'Error getting car by VIN',
+      log: 'Error getting car',
       message: { error }
     })
   });
@@ -73,8 +73,8 @@ carController.getCar = (req, res, next) => {
 
 carController.addCar = (req, res, next) => {
   const { vin } = req.params;
-  const { license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color } = req.body;
   const { year, make, model } = res.locals.decoded;
+  const { license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color } = req.body;
 
   const query = 
   `INSERT INTO Cars
@@ -85,7 +85,6 @@ carController.addCar = (req, res, next) => {
   db.query(query, queryParams)
   .then(data => {
     res.locals.newCar = data.rows[0];
-    console.log(data.rows)
     return next();
   }).catch(error => {
     return next({
@@ -106,8 +105,25 @@ carController.addCar = (req, res, next) => {
 
 carController.updateCar = (req, res, next) => {
   const { vin } = req.params;
+  const { year, make, model } = res.locals.decoded;
+  const { license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color } = req.body;
 
-  return next();
+  const query = 
+  `UPDATE Cars 
+  SET vin = $1, year = $2, make = $3, model = $4, license_plate = $5, registration_number = $6, registration_state = $7, registration_expiration = $8, registration_name = $9, value = $10, mileage = $11, description = $12, color = $13, last_updated = current_timestamp
+  WHERE vin = $1 RETURNING *`
+  const queryParams = [vin, year, make, model, license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color];
+
+  db.query(query, queryParams)
+  .then(data => {
+    res.locals.updatedCar = data.rows[0];
+    return next();
+  }).catch(error => {
+    return next({
+      log: 'Error updating car',
+      message: { error }
+    })
+  });
 
 };
 
@@ -130,7 +146,7 @@ carController.deleteCar = (req, res, next) => {
     return next();
   }).catch(error => {
     return next({
-      log: 'Error getting car by VIN',
+      log: 'Error deleting car',
       message: { error }
     })
   });

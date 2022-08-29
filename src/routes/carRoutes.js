@@ -16,7 +16,7 @@ router.post('/:vin', carController.decodeVin, carController.addCar, (req, res) =
   return res.status(200).json(res.locals.newCar);
 });
 
-router.patch('/:vin', carController.updateCar, (req, res) => {
+router.patch('/:vin', carController.decodeVin, carController.updateCar, (req, res) => {
   return res.status(200).json(res.locals.updatedCar);
 });
 
