@@ -1,8 +1,9 @@
 # Assumptions & Notes:
 
-- server side data validation is in place, all input is good to go
-- registration expiration should be updated on the front end to be the same as the db format (YYYY-MM-DD), but if not we can easily manipulate that
-- user should not update their own VIN, it should have to be manually adjusted by company (I wrote the functionality, however from a business perspective I don't see the benefit)
+- server side data validation is in place, all input in request is good to go
+- registration expiration date should be updated on the front end to be the same as the db format (YYYY-MM-DD), but if not we can easily manipulate that on the back end too
+- user should not update their own VIN/year/make/model, it should have to be manually adjusted by company - for production I would make it so the user can update only the color, mileage, and description
+- production-ready code would use typescript and incorporate unit tests to make sure the endpoints & db queries are working correctly, however for the sake of time I have chosen to exclude them
 
 ## sample of request body to list or update a car:
 

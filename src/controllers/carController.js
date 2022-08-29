@@ -105,14 +105,13 @@ carController.addCar = (req, res, next) => {
 
 carController.updateCar = (req, res, next) => {
   const { vin } = req.params;
-  const { year, make, model } = res.locals.decoded;
   const { license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color } = req.body;
 
   const query = 
   `UPDATE Cars 
-  SET vin = $1, year = $2, make = $3, model = $4, license_plate = $5, registration_number = $6, registration_state = $7, registration_expiration = $8, registration_name = $9, value = $10, mileage = $11, description = $12, color = $13, last_updated = current_timestamp
+  SET license_plate = $2, registration_number = $3, registration_state = $4, registration_expiration = $5, registration_name = $6, value = $7, mileage = $8, description = $9, color = $10, last_updated = current_timestamp
   WHERE vin = $1 RETURNING *`
-  const queryParams = [vin, year, make, model, license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color];
+  const queryParams = [vin, license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color];
 
   db.query(query, queryParams)
   .then(data => {
@@ -137,7 +136,7 @@ carController.updateCar = (req, res, next) => {
 
 carController.deleteCar = (req, res, next) => {
   const { vin } = req.params;
-  const query = `DELETE * FROM Cars WHERE vin = $1 RETURNING *`
+  const query = `DELETE FROM Cars WHERE vin = $1 RETURNING *`
   const queryParams = [ vin ]
   
   db.query(query, queryParams)
