@@ -61,6 +61,7 @@ carController.getCar = (req, res, next) => {
       message: { error }
     })
   })
+
 };
 
 
@@ -73,7 +74,26 @@ carController.getCar = (req, res, next) => {
 
 carController.addCar = (req, res, next) => {
   const { vin } = req.params;
-  return next();
+  const { year, make, model, license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color } = req.body;
+
+  const query = 
+  `INSERT INTO Cars
+  VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, DEFAULT, current_timestamp)
+  RETURNING *`;
+  const queryParams = [vin, year, make, model, license, registrationNumber, registrationState, registrationExpiration, registrationName, value, mileage, description, color]
+
+  db.query(query, queryParams)
+  .then(data => {
+    res.locals.newCar = data.rows[0];
+    return next();
+  }).catch(error => {
+    //error handler
+    return next({
+      log: 'Error getting car by VIN',
+      message: { error }
+    })
+  })
+
 };
 
 
